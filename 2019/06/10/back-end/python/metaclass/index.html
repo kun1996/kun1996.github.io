@@ -157,14 +157,14 @@
 <li>立马执行__init__方法，进行MyClass类的初始化,定义一些属性</li>
 <li>当MyClass类进行实例化的时候，调用__call__方法</li>
 </ul>
-<p>在平时实例化类的时候，我们知道，会调用_<em>new_<em>和__init__方法，<br>而这里，实例化的时候调用了__call__方法，我们是不是可以猜测__call\</em></em><br>里面调用了这两个方法呢，答案确实是这样，如果你在添加上</p>
+<p>在平时实例化类的时候，我们知道，会调用__new__和__init__方法，而这里，实例化的时候调用了__call__方法，我们是不是可以猜测__call__里面调用了这两个方法呢，答案确实是这样，如果你在添加上</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__new__</span><span class="params">(cls, *args, **kwargs)</span>:</span></span><br><span class="line">    print(<span class="string">'__new__方法2执行了'</span>, cls, args, kwargs)</span><br><span class="line">    <span class="keyword">return</span> object.__new__(cls, *args, **kwargs)</span><br></pre></td></tr></table></figure>
 
 <p>然后将代码改成</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">    print(<span class="string">'__init__方法2执行了'</span>)</span><br><span class="line">    self.a = <span class="number">1</span></span><br><span class="line">MyClass = MyType(<span class="string">'MyClass'</span>, (), &#123;<span class="string">'__init__'</span>: __init__, <span class="string">'b'</span>: <span class="number">1</span>, <span class="string">'__new__'</span>: __new__&#125;)</span><br></pre></td></tr></table></figure>
 
 <p>你就会发现在call后会输出new和init</p>
-<h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><p>python中()的执行，是靠魔法方法<strong>call</strong>的，也就是你在一个变量x后面加上(),即x()其实是调用的<strong>call</strong>方法，而实例化类的时候，其实就是调用了这个方法，最后返回一个对象，我们称作为实例。<br>class == type(name,base,dict)<br>self == class() == class.<strong>call</strong>()<br>因此python中可以认为只有一个类，那就是元类，其他的类都是元类的实例，而类的实例，只是类调用了魔法方法，而产生了不同的对象，即实例对象。</p>
+<h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><p>python中()的执行，是靠魔法方法_<em>call_<em>的，也就是你在一个变量x后面加上(),即x()其实是调用的__call__方法，而实例化类的时候，其实就是调用了这个方法，最后返回一个对象，我们称作为实例。<br>class == type(name,base,dict)<br>self == class() == class.__call\</em></em>()<br>因此python中可以认为只有一个类，那就是元类，其他的类都是元类的实例，而类的实例，只是类调用了魔法方法，而产生了不同的对象，即实例对象。</p>
 
         
     </section>
