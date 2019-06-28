@@ -145,13 +145,14 @@
         <h3 id="nginx变量"><a href="#nginx变量" class="headerlink" title="nginx变量"></a>nginx变量</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 8080;</span><br><span class="line"></span><br><span class="line">    location /test &#123;</span><br><span class="line">        set $foo hello;</span><br><span class="line">        echo &quot;foo: $foo&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>set指令是ngx_rewrite模块的，$foo是变量，可以在字符串中直接引用或者${foo}，但是怎么使用$符号呢</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">geo $dollar &#123;</span><br><span class="line">    default &quot;$&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 8080;</span><br><span class="line"></span><br><span class="line">    location /test &#123;</span><br><span class="line">       echo &quot;$dollar&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    location /foo &#123;</span><br><span class="line">        set $a hello;</span><br><span class="line">        rewrite ^ /bar;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /bar &#123;</span><br><span class="line">        echo &quot;a = [$a]&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>ngx_geo的geo模块可以解决,而且set定义的变量的生命周期是和请求的周期一样的</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">    location /test &#123;</span><br><span class="line">        echo &quot;uri = $uri&quot;;</span><br><span class="line">        echo &quot;request_uri = $request_uri&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    location /test &#123;</span><br><span class="line">        echo &quot;name: $arg_name&quot;;</span><br><span class="line">        echo &quot;class: $arg_class&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">location /test &#123;</span><br><span class="line">        set_unescape_uri $name $arg_name;</span><br><span class="line">        set_unescape_uri $class $arg_class;</span><br><span class="line"></span><br><span class="line">        echo &quot;name: $name&quot;;</span><br><span class="line">        echo &quot;class: $class&quot;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>ngx_http_core 模块提供的内建变量 $uri，可以用来获取当前请求的 URI（经过解码，并且不含请求参数），而 $request_uri 则用来获取请求最原始的 URI （未经解码，并且包含请求参数）<br>以 arg_ 开头的所有变量，称之为 $arg_XXX 变量群。一个例子是 $arg_name，这个变量的值是当前请求名为 name 的 URI 参数的值，而且还是未解码的原始形式的值<br>$arg_name 不仅可以匹配 name 参数，也可以匹配 NAME 参数，抑或是 Name，等等<br>第三方 ngx_set_misc 模块提供的 set_unescape_uri 配置指令对 URI 参数值中的 %XX 这样的编码序列进行解码,set_unescape_uri 指令也像 set 指令那样，拥有自动创建 Nginx 变量的功能.<br>类似 $arg_XXX 的内建变量还有不少，比如用来取 cookie 值的 $cookie_XXX 变量群，用来取请求头的 $http_XXX 变量群，以及用来取响应头的 $sent_http_XXX 变量群,可以参考 ngx_http_core 模块的官方文档。<br>$args参数可以改写</p>
-
+        
+        <p class="article-more-link">
+            <a href="/2019/06/20/back-end/nginx/nginx/#more">
+                <span class="vm">阅读更多</span>
+                <i class="icon-arrow-double-right vm"></i>    
+            </a>
+        </p>
+        
         
     </section>
 </article>
@@ -189,6 +190,51 @@
         
         <p class="article-more-link">
             <a href="/2019/06/19/back-end/lua/laips/#more">
+                <span class="vm">阅读更多</span>
+                <i class="icon-arrow-double-right vm"></i>    
+            </a>
+        </p>
+        
+        
+    </section>
+</article>
+
+
+    <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            <a href="/2019/06/19/back-end/git/git/">git教程</a>
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="http://kun1996.github.io/categories/back-end/index.html">
+    
+    <i class="icon-calendar"></i>
+    
+    <time datetime="2019-06-19T08:11:00.000Z" itemprop="datePublished">2019-06-19</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag"></i>
+    <a class="article-tag-link" href="/tags/git/">git</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h4 id="git-配置"><a href="#git-配置" class="headerlink" title="git 配置"></a>git 配置</h4><p>git 提供了一个叫做 git config 的工具，专门用来配置或读取相应的工作环境变量。</p>
+<p>这些环境变量，决定了 Git 在各个环节的具体工作方式和行为。这些变量可以存放在以下三个不同的地方：</p>
+<p>/etc/gitconfig 文件：系统中对所有用户都普遍适用的配置。若使用 git config 时用 –system 选项，读写的就是这个文件。<br>~/.gitconfig 文件：用户目录下的配置文件只适用于该用户。若使用 git config 时用 –global 选项，读写的就是这个文件。<br>当前项目的 Git 目录中的配置文件（也就是工作目录中的 .git/config 文件）：这里的配置仅仅针对当前项目有效。每一个级别的配置都会覆盖上层的相同配置，所以 .git/config 里的配置会覆盖 /etc/gitconfig 中的同名变量。<br>在 Windows 系统上，Git 会找寻用户主目录下的 .gitconfig 文件。主目录即 $HOME 变量指定的目录，一般都是 C:\Documents and Settings$USER。</p>
+<p>此外，Git 还会尝试找寻 /etc/gitconfig 文件，只不过看当初 Git 装在什么目录，就以此作为根目录来定位</p>
+        
+        <p class="article-more-link">
+            <a href="/2019/06/19/back-end/git/git/#more">
                 <span class="vm">阅读更多</span>
                 <i class="icon-arrow-double-right vm"></i>    
             </a>
